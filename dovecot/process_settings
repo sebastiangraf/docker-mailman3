@@ -1,0 +1,24 @@
+# configure mail delivery to dovecot
+cp /mail_settings/aliases /etc/postfix/virtual
+cp /mail_settings/domains /etc/postfix/virtual-mailbox-domains
+
+# todo: this could probably be done in one line
+mkdir /etc/postfix/tmp
+awk < /etc/postfix/virtual '{ print $2 }' > /etc/postfix/tmp/virtual-receivers
+sed -r 's,(.+)@(.+),\2/\1/,' /etc/postfix/tmp/virtual-receivers > /etc/postfix/tmp/virtual-receiver-folders
+paste /etc/postfix/tmp/virtual-receivers /etc/postfix/tmp/virtual-receiver-folders > /etc/postfix/virtual-mailbox-maps
+
+# give postfix the ownership of his files
+chown -R postfix:postfix /etc/postfix
+
+# map virtual aliases and user/filesystem mappings
+postmap /etc/postfix/virtual
+postmap /etc/postfix/virtual-mailbox-maps
+chown -R postfix:postfix /etc/postfix
+
+# make user vmail own all mail folders
+chown -R vmail:vmail /vmail
+chmod u+w /vmail
+
+# Add password file
+cp /mail_settings/passwords /etc/dovecot/passwd
