@@ -1,3 +1,7 @@
+if [ -f /mail_settings/myhostname ]; then
+	sed -i -e "s/myhostname = localhost/myhostname = $(sed 's:/:\\/:g' /mail_settings/myhostname)/" /etc/postfix/main.cf
+fi
+
 # configure mail delivery to dovecot
 cp /mail_settings/aliases /etc/postfix/virtual
 cp /mail_settings/domains /etc/postfix/virtual-mailbox-domains

@@ -40,26 +40,27 @@ be delivered to the corresponding account in the right column.
     john.doe@example.org:{PLAIN}password123
     admin@example.org:{SHA256-CRYPT}$5$ojXGqoxOAygN91er$VQD/8dDyCYOaLl2yLJlRFXgl.NSrB3seZGXBRMdZAr6
 
-To get the hash values, you can either install dovecot locally or use lxc-attach to attach to the running
+To get the hash values, you can either install dovecot locally or use `docker exec -it dockermail bash` to attach to the running
 container and run `doveadm pw -s <scheme-name>` inside.
 
-4) Build container
+4) Change the hostname in file `/opt/dockermail/settings/myhostname` to the correct fully qualified domain of your server.
+
+5) Build container
 
     make
 
-5) Run container and map ports 25 and 143 from the host to the container.
+6) Run container and map ports 25 and 143 from the host to the container.
    To store your mail outside the container, map `/opt/dockermail/vmail/` to
    a directory on your host. (This is recommended, otherwise
    you have to remember to backup your mail when you want to restart the container)
 
    `docker run -d -p 25:25 -p 587:587 -p 143:143 -v /opt/dockermail/settings:/mail_settings -v /opt/dockermail/vmail:/vmail dovecot_made_special/2.1.7`
 
-6) Enjoy.
+7) Enjoy.
 
 
 Known issues / Todo / Wishlist
 ==============================
-- HELO isn't set correctly, which can lead to problems with outgoing mail on some servers
 
 - It would be nice to have a way of catching mail to all subdomains.
 
