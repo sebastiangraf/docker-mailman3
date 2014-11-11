@@ -43,8 +43,10 @@ RUN apt-get install -y --force-yes postfix
 # Install dovecot as IMAP server
 RUN apt-get install -y --force-yes dovecot-imapd
 
+# Install OpenDKIM domain signing server
+RUN apt-get install -y --force-yes opendkim
+
 # postfix configuration
-RUN echo "mail.docker.container" > /etc/mailname
 ADD ./postfix.main.cf /etc/postfix/main.cf
 ADD ./postfix.master.cf.append /etc/postfix/master-additional.cf
 RUN cat /etc/postfix/master-additional.cf >> /etc/postfix/master.cf
@@ -80,5 +82,5 @@ EXPOSE 587
 # http://www.synology-wiki.de/index.php/Zusaetzliche_Ports_fuer_Postfix
 
 # start necessary services for operation (dovecot -F starts dovecot in the foreground to prevent container exit)
-ENTRYPOINT /process_settings; service rsyslog start; service postfix start; dovecot -F
+ENTRYPOINT /process_settings; service rsyslog start; service opendkim start; service postfix start; dovecot -F
 
