@@ -6,18 +6,19 @@ Based on https://github.com/lava/dockermail
 A secure, minimal-configuration mail server in a docker container.
 
 This repository is tailored to small private servers, where you own some domain(s) and
-want to receive the mail for and send mail from this domain:
+want to receive the mail for and send mail from this domain.
 
 The SMTP and IMAP server. This container uses postfix as MTA and dovecot as IMAP server.
 All incoming mail to your own domains is accepted. For outgoing mail, only authenticated
 (logged in with username and password) clients can send messages via STARTTLS on port 587.
-In theory it works with all mail clients, but it was only tested with Thunderbird.
+Outgoing mail is configured to get OpenDKIM signature, you need to generate a key and set up your domain records.
+Also you should add PTR record to your IP (aka reverse DNS) which is done by your server provider and add an SPF record to your domain - otherwise you may get your mail spam filtered.
 
 
 Setup
 =====
 Create 2 folders: one for mail configuration (`/opt/dockermail/settings`), another for mail storage (`/opt/dockermail/vmail`).
-
+Use the the example config files in `dovecot/example` of this repo.
 
 1) Add all domains you want to receive mail for to the file `/opt/dockermail/settings/domains`, like this:
 
@@ -47,6 +48,8 @@ container and run `doveadm pw -s <scheme-name>` inside.
 
 5) Add DKIM settings files: `/opt/dockermail/settings/opendkim.conf` and `/opt/dockermail/settings/mail.private`
    See https://help.ubuntu.com/community/Postfix/DKIM on the info about these settings.
+   You will need to generate your own `mail.private` key and set up your domain records, the `opendkim.conf` from `dovecot/examples`
+   is ready to use.
 
 6) Build container
 
