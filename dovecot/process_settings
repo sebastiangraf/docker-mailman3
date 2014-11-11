@@ -1,6 +1,6 @@
 # Copy OpenDKIM config
 cp /mail_settings/opendkim.conf /etc/opendkim.conf
-cp /mail_settings/mail.private /etc/mail/dkim.key
+cp /mail_settings/mail.private /etc/postfix/dkim.key
 
 if [ -f /mail_settings/myhostname ]; then
 	sed -i -e "s/myhostname = localhost/myhostname = $(sed 's:/:\\/:g' /mail_settings/myhostname)/" /etc/postfix/main.cf
