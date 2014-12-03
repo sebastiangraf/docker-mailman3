@@ -24,7 +24,7 @@ RUN apt-get install -y --force-yes opendkim
 
 # postfix configuration
 ADD ./config/postfix.main.cf /etc/postfix/main.cf
-ADD ./condig/postfix.master.cf.append /etc/postfix/master-additional.cf
+ADD ./config/postfix.master.cf.append /etc/postfix/master-additional.cf
 RUN cat /etc/postfix/master-additional.cf >> /etc/postfix/master.cf
 
 # configure settings script
