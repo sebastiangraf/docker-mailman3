@@ -28,7 +28,7 @@ ADD ./config/postfix.master.cf.append /etc/postfix/master-additional.cf
 RUN cat /etc/postfix/master-additional.cf >> /etc/postfix/master.cf
 
 # configure settings script
-VOLUME ["/mail_config"]
+VOLUME ["/mail_settings"]
 COPY process_settings /process_settings
 RUN chmod 755 /process_settings
 
