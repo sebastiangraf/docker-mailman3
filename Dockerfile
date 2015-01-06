@@ -5,10 +5,6 @@ RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
 
 RUN apt-get update
 
-RUN apt-get -y -q autoclean
-RUN apt-get -y -q autoremove
-RUN apt-get clean
-
 # Prerequisites
 # install self-signed ssl certs
 RUN apt-get install -y --force-yes ssl-cert
@@ -47,13 +43,7 @@ ADD ./config/dovecot.imap /etc/dovecot/conf.d/20-imap.conf
 # add verbose logging
 #ADD ./config/dovecot.logging /etc/dovecot/conf.d/10-logging.conf
 
-# smtp port for incoming mail
-EXPOSE 25 
-# imap port
-EXPOSE 143
-# smtp port for outgoing
-EXPOSE 587
-
+EXPOSE 25 143 587
 # todo: enable port 587 for outgoing mail, separate ports 25 and 587
 # http://www.synology-wiki.de/index.php/Zusaetzliche_Ports_fuer_Postfix
 
