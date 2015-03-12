@@ -4,7 +4,6 @@ docker-made-special-mail
 Based on https://github.com/lava/dockermail
 
 A secure, minimal-configuration mail server in a docker container.
-
 This repository is tailored to small private servers, where you own a domain and want to host your own mail.
 
 This container uses postfix as MTA and dovecot as IMAP server.
@@ -61,6 +60,6 @@ Use the the example config files in `config/example` of this repo.
 	 a directory on your host. (This is recommended, otherwise
 	 you have to remember to backup your mail when you want to restart the container)
 
-	 `docker run -name dockermail -d -p 25:25 -p 587:587 -p 143:143 -v /opt/dockermail/settings:/mail_settings -v /opt/dockermail/vmail:/vmail dockermail_made_special/2.11.1
+	 `docker run -name dockermail -d -p 25:25 -p 587:587 -p 143:143 -v /opt/dockermail/settings:/mail_settings -v /opt/dockermail/vmail:/vmail dockermail_made_special/2.11.1`
 
 8. Enjoy!
