@@ -61,6 +61,6 @@ Use the the example config files in `config/example` of this repo.
 	 a directory on your host. (This is recommended, otherwise
 	 you have to remember to backup your mail when you want to restart the container)
 
-	 `docker run -name dockermail -d -p 25:25 -p 587:587 -p 143:143 -v /opt/dockermail/settings:/mail_settings -v /opt/dockermail/vmail:/vmail dockermail_made_special/2.1.7`
+	 `docker run -name dockermail -d -p 25:25 -p 587:587 -p 143:143 -v /opt/dockermail/settings:/mail_settings -v /opt/dockermail/vmail:/vmail dockermail_made_special/2.11.1
 
 8. Enjoy!

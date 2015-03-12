@@ -1,22 +1,16 @@
-FROM ubuntu:14.04
+FROM ubuntu:14.10
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
 
-RUN apt-get update
-
 # Prerequisites
-# install self-signed ssl certs
-RUN apt-get install -y --force-yes ssl-cert
-
-# Install postfix as MTA
-RUN apt-get install -y --force-yes postfix
-
-# Install dovecot as IMAP server
-RUN apt-get install -y --force-yes dovecot-imapd
-
-# Install OpenDKIM domain signing server
-RUN apt-get install -y --force-yes opendkim
+RUN apt-get update && apt-get install -y \
+    ssl-cert \
+    postfix \
+    dovecot-imapd \
+    opendkim && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # postfix configuration
 ADD ./config/postfix.main.cf /etc/postfix/main.cf
@@ -49,4 +43,3 @@ EXPOSE 25 143 587
 
 # start necessary services for operation (dovecot -F starts dovecot in the foreground to prevent container exit)
 ENTRYPOINT /process_settings; service rsyslog start; service opendkim start; service postfix start; dovecot -F
-
