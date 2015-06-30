@@ -63,3 +63,10 @@ Use the the example config files in `config/example` of this repo.
 	 `docker run -name dockermail -d -p 25:25 -p 587:587 -p 143:143 -v /opt/dockermail/settings:/mail_settings -v /opt/dockermail/vmail:/vmail dockermail_made_special/2.11.1`
 
 8. Enjoy!
+
+
+TODO
+=====
+1. Split out DKIM into a seperate container, which can be linked in to postfix.
+2. Add ability to plug other components from linked containers (SPAM filters, Autoresponders etc)
+3. Provider an easy way to compose these into a working mail system.
