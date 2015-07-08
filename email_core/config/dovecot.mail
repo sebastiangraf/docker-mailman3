@@ -16,4 +16,4 @@ namespace inbox {
     auto = subscribe # autocreate and autosubscribe the Sent mailbox
     special_use = \Sent
   }
-  }
+}

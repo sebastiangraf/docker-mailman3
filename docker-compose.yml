@@ -1,0 +1,15 @@
+emailcore:
+  build: ./email_core
+  ports:
+    - "25:25"
+    - "143:143"
+    - "587:587"
+  volumes:
+    - /opt/dockermail/settings:/mail_settings
+    - /opt/dockermail/vmail:/vmail
+  links:
+   - opendkim
+opendkim:
+  build: ./opendkim
+  volumes:
+    - /opt/dockermail/settings:/mail_settings
