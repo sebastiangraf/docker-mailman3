@@ -1,0 +1,5 @@
+# Copy OpenDKIM config
+cp /mail_settings/opendkim.conf /etc/opendkim.conf
+cp /mail_settings/mail.private /etc/dkim.key
+chown opendkim:opendkim /etc/dkim.key
+chmod 600 /etc/dkim.key
