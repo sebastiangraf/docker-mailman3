@@ -1,7 +1,7 @@
 Dockermail
 ==========
 
-A secure, minimal-configuration mail server in a docker containers.
+A secure, minimal-configuration mail service in docker containers.
 This repository is tailored to small private servers, where you own a domain and want to host your own mail.
 
 The setup is modular and so far has (more to come, feel free to contribute :)
