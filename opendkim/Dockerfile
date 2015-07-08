@@ -9,10 +9,15 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# configure settings script
+# Nice place for your settings
 VOLUME ["/mail_settings"]
-COPY boot /boot
+
+# Configure boot script
+COPY boot /
 RUN chmod 755 /boot
 
-# start necessary services for operation (dovecot -F starts dovecot in the foreground to prevent container exit)
-ENTRYPOINT /boot; service rsyslog start; opendkim -f
+ENV OPEN_DKIM true
+ENV OPEN_DKIM_PORT_8891_ADDR inet:8891
+
+EXPOSE 8891
+ENTRYPOINT ./boot; service rsyslog start; opendkim -f -p $OPEN_DKIM_PORT_8891_ADDR
