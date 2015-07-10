@@ -49,7 +49,7 @@ cp /mail_settings/passwords /etc/dovecot/passwd
 
 # OpenDKIM config
 POSTFIX_MAIN_CF=/etc/postfix/main.cf
-if [ -z "$OPEN_DKIM" ]; then
+if [ ! -z "$OPEN_DKIM" ]; then
 	# Add config block if not present already
 	if grep -q "# OpenDKIM - dockermail" "$POSTFIX_MAIN_CF"; then
 		echo "# OpenDKIM - dockermail" >> "$POSTFIX_MAIN_CF"
