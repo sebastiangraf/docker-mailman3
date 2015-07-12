@@ -1,9 +1,6 @@
 #!/bin/bash
 echo 'Running opendkim boot script'
 
-export DOCKERMAIL_OPENDKIM_ENV_OPEN_DKIM=true
-export DOCKERMAIL_OPENDKIM_PORT_8891_TCP_ADDR=172.17.0.10
-
 POSTFIX_MAIN_CF=/etc/postfix/main.cf
 
 env_dump=$(printenv)
