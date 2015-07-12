@@ -1,5 +1,6 @@
-# Check if we have SSL certificates in config, otherwise copy it there
+#!/bin/bash
 
+# Check if we have SSL certificates in config, otherwise copy it there
 # First the key file
 if [ -f /mail_settings/ssl-cert-snakeoil.key ]; then
 	cp /mail_settings/ssl-cert-snakeoil.key /etc/ssl/private/ssl-cert-snakeoil.key
@@ -46,20 +47,10 @@ chmod u+w /vmail
 # Add password file
 cp /mail_settings/passwords /etc/dovecot/passwd
 
-
-# OpenDKIM config
-POSTFIX_MAIN_CF=/etc/postfix/main.cf
-if [ ! -z "$OPEN_DKIM" ]; then
-	# Add config block if not present already
-	if grep -q "# OpenDKIM - dockermail" "$POSTFIX_MAIN_CF"; then
-		echo "# OpenDKIM - dockermail" >> "$POSTFIX_MAIN_CF"
-		echo "milter_default_action = accept" >> "$POSTFIX_MAIN_CF"
-		echo "milter_protocol = 2" >> "$POSTFIX_MAIN_CF"
-		echo "smtpd_milters = $OPEN_DKIM_PORT_8891_ADDR" >> "$POSTFIX_MAIN_CF"
-		echo "non_smtpd_milters = $OPEN_DKIM_PORT_8891_ADDR" >> "$POSTFIX_MAIN_CF"
-		echo "# OpenDKIM - dockermail - end" >> "$POSTFIX_MAIN_CF"
-	fi
-else
-	# Remove OpenDKIM block
-	sed '/# OpenDKIM - dockermail/,/# OpenDKIM - dockermail - end/d' "$POSTFIX_MAIN_CF"
-fi
+# Run boot scripts
+for SCRIPT in /boot.d/*
+do
+  if [ -f "$SCRIPT" -a -x "$SCRIPT" ]; then
+    "$SCRIPT"
+  fi
+done

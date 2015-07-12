@@ -16,8 +16,8 @@ VOLUME ["/mail_settings"]
 COPY boot /
 RUN chmod 755 /boot
 
-ENV OPEN_DKIM true
-ENV OPEN_DKIM_PORT_8891_ADDR inet:8891
+ENV OPEN_DKIM=true
 
 EXPOSE 8891
-ENTRYPOINT ./boot; service rsyslog start; opendkim -f -p $OPEN_DKIM_PORT_8891_ADDR
+
+ENTRYPOINT /boot; service rsyslog start; opendkim -f -p inet:8891

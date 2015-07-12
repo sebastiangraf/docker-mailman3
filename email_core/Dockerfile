@@ -29,12 +29,15 @@ ADD ./config/dovecot.imap /etc/dovecot/conf.d/20-imap.conf
 # Nice place for your settings
 VOLUME ["/mail_settings"]
 
-# Configure boot script
+# Copy boot scripts
 COPY boot /
 RUN chmod 755 /boot
+COPY boot.d /boot.d
+RUN chmod -R 755 /boot.d
 
 # Volume to store email
 VOLUME ["/vmail"]
+
 # Add user vmail that ownes mail
 RUN groupadd -g 5000 vmail
 RUN useradd -g vmail -u 5000 vmail -d /vmail -m
