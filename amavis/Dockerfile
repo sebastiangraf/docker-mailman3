@@ -31,4 +31,4 @@ ENV AMAVIS=true
 
 EXPOSE 10024
 
-ENTRYPOINT ./boot; service rsyslog start; amavisd foreground
+ENTRYPOINT ./boot; service rsyslog start; amavisd-new foreground

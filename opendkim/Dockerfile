@@ -20,4 +20,4 @@ ENV OPEN_DKIM=true
 
 EXPOSE 8891
 
-ENTRYPOINT /boot; service rsyslog start; opendkim -f -p inet:8891
+ENTRYPOINT /boot; service rsyslog start; opendkim -f -p inet:8891@0.0.0.0

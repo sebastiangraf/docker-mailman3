@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -f /mail_settings/myhostname ]; then
+	echo $(sed 's:/:\\/:g' /mail_settings/myhostname) > /etc/mailname
+fi
+
 readarray -t domains < /mail_settings/domains
 domain_suffix=$(printf ", \"%s\"" "${domains[@]}")
 domain_string="@local_domains_acl = ( \".$mydomain\" $domain_suffix );"
