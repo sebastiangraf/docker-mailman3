@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
 # Set up razor and pyzor
 RUN su - amavis -s /bin/bash && razor-admin -create && razor-admin -register && pyzor discover
 
-COPY ./config/amavis-content_filter_mode /etc/amavis/conf.d/15-content_filter_mode
+COPY ./config/15-content_filter_mode /etc/amavis/conf.d/15-content_filter_mode
+COPY ./config/50-user /etc/amavis/conf.d/50-user
 
 # Nice place for your settings
 VOLUME ["/mail_settings"]
@@ -27,5 +28,7 @@ COPY boot /
 RUN chmod 755 /boot
 
 ENV AMAVIS=true
+
+EXPOSE 10024
 
 ENTRYPOINT ./boot; service rsyslog start; amavisd foreground

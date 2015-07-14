@@ -1,0 +1,75 @@
+#!/bin/bash
+echo 'Running amavis boot script'
+
+POSTFIX_MAIN_CF=/etc/postfix/main.cf
+POSTFIX_MASTER_CF=/etc/postfix/master.cf
+
+env_dump=$(printenv)
+
+AMAVIS_CONFIG_HEADER="# Amavis - dockermail - start"
+AMAVIS_CONFIG_FOOTER="# Amavis - dockermail - end"
+
+function remove_amavis () {
+  # main.cf
+  if grep -q "$AMAVIS_CONFIG_HEADER" "$POSTFIX_MAIN_CF"; then
+    sed "/$AMAVIS_CONFIG_HEADER/,/$AMAVIS_CONFIG_FOOTER/d" "$POSTFIX_MAIN_CF" -i
+  fi
+  # master.cf
+  sed '/^pickup/,/^cleanup/{//!d}' POSTFIX_MASTER_CF -i
+  sed "/$AMAVIS_CONFIG_HEADER/,/$AMAVIS_CONFIG_FOOTER/d" POSTFIX_MASTER_CF -i
+}
+
+function add_amavis () {
+  # main.cf
+  if ! grep -q "$AMAVIS_CONFIG_HEADER" "$POSTFIX_MAIN_CF"; then
+    echo "$AMAVIS_CONFIG_HEADER" >> "$POSTFIX_MAIN_CF"
+    echo "content_filter = smtp-amavis:[amavis]:10024" >> "$POSTFIX_MAIN_CF"
+    echo "$AMAVIS_CONFIG_FOOTER" >> "$POSTFIX_MAIN_CF"
+  else
+    echo "Warning: $POSTFIX_MAIN_CF already contains Amavis configuration, skipping"
+  fi
+  # master.cf
+  if ! grep -q "$AMAVIS_CONFIG_HEADER" "$POSTFIX_MASTER_CF"; then
+    sed "/^pickup.*/a \  -o content_filter= \n  -o receive_override_options=no_header_body_checks/" POSTFIX_MASTER_CF -i
+    echo "$AMAVIS_CONFIG_HEADER" >> POSTFIX_MASTER_CF
+    echo "smtp-amavis     unix    -       -       -       -       2       smtp" >> POSTFIX_MASTER_CF
+    echo "  -o smtp_data_done_timeout=1200" >> POSTFIX_MASTER_CF
+    echo "  -o smtp_send_xforward_command=yes" >> POSTFIX_MASTER_CF
+    echo "  -o disable_dns_lookups=yes" >> POSTFIX_MASTER_CF
+    echo "  -o max_use=20" >> POSTFIX_MASTER_CF
+    echo "0.0.0.0:10025 inet    n       -       -       -       -       smtpd" >> POSTFIX_MASTER_CF
+    echo "  -o content_filter=" >> POSTFIX_MASTER_CF
+    echo "  -o local_recipient_maps=" >> POSTFIX_MASTER_CF
+    echo "  -o relay_recipient_maps=" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_restriction_classes=" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_delay_reject=no" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_client_restrictions=permit_mynetworks,reject" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_helo_restrictions=" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_sender_restrictions=" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_recipient_restrictions=permit_mynetworks,reject" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_data_restrictions=reject_unauth_pipelining" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_end_of_data_restrictions=" >> POSTFIX_MASTER_CF
+    echo "  -o mynetworks=127.0.0.0/8 amavis" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_error_sleep_time=0" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_soft_error_limit=1001" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_hard_error_limit=1000" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_client_connection_count_limit=0" >> POSTFIX_MASTER_CF
+    echo "  -o smtpd_client_connection_rate_limit=0" >> POSTFIX_MASTER_CF
+    echo "  -o receive_override_options=no_header_body_checks,no_unknown_recipient_checks" >> POSTFIX_MASTER_CF
+    echo "$AMAVIS_CONFIG_FOOTER" >> POSTFIX_MASTER_CF
+  else
+    echo "Warning: $POSTFIX_MASTER_CF already contains Amavis configuration, skipping"
+  fi
+}
+
+if [[ $env_dump =~ ^(.+AMAVIS)= ]] ; then
+  if [ ! -z "${BASH_REMATCH[1]}" ]; then
+    echo "AMAVIS env set, enabling email signing"
+    add_amavis
+  fi
+else
+  echo "Cant find OPEN_DKIM env, signing will be disabled"
+  remove_amavis
+fi
+
+echo 'Finished amavis boot script'

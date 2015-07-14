@@ -1,4 +1,4 @@
-Dockermail
+Dockermail - MAJOR RESTRUCTURE GOING ON, WORK IN PROGRESS!
 ==========
 
 A secure, minimal-configuration mail service in docker containers.

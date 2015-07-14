@@ -1,1 +1,8 @@
 #!/bin/bash
+
+readarray -t domains < /mail_settings/domains
+domain_suffix=$(printf ", \"%s\"" "${domains[@]}")
+domain_string="@local_domains_acl = ( \".$mydomain\" $domain_suffix );"
+
+sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/50-user -i
+sed "/# DOCKERMAIL DOMAINS START/a $domain_string/" /etc/amavis/conf.d/50-user -i

@@ -10,22 +10,17 @@ OPENDKIM_CONFIG_FOOTER="# OpenDKIM - dockermail - end"
 
 function remove_opendkim () {
   if grep -q "$OPENDKIM_CONFIG_HEADER" "$POSTFIX_MAIN_CF"; then
-    sed "/$OPENDKIM_CONFIG_HEADER/,/$OPENDKIM_CONFIG_FOOTER/d" "$POSTFIX_MAIN_CF"
+    sed "/$OPENDKIM_CONFIG_HEADER/,/$OPENDKIM_CONFIG_FOOTER/d" "$POSTFIX_MAIN_CF" -i
   fi
 }
 
 function add_opendkim () {
   if ! grep -q "$OPENDKIM_CONFIG_HEADER" "$POSTFIX_MAIN_CF"; then
     echo "$OPENDKIM_CONFIG_HEADER" >> "$POSTFIX_MAIN_CF"
-
     echo "milter_default_action = accept" >> "$POSTFIX_MAIN_CF"
     echo "milter_protocol = 2" >> "$POSTFIX_MAIN_CF"
-
-    if [[ $env_dump =~ ^.*PORT_8891_TCP_ADDR=([0-9\.]*) ]] ; then
-      echo "smtpd_milters = inet:${BASH_REMATCH[1]}:8891" >> "$POSTFIX_MAIN_CF"
-      echo "non_smtpd_milters = inet:${BASH_REMATCH[1]}:8891" >> "$POSTFIX_MAIN_CF"
-    fi
-
+    echo "smtpd_milters = inet:opendkim:8891" >> "$POSTFIX_MAIN_CF"
+    echo "non_smtpd_milters = inet:opendkim:8891" >> "$POSTFIX_MAIN_CF"
     echo "$OPENDKIM_CONFIG_FOOTER" >> "$POSTFIX_MAIN_CF"
   else
     echo "Warning: $POSTFIX_MAIN_CF already contains OpenDKIM configuration, skipping"
@@ -35,7 +30,6 @@ function add_opendkim () {
 if [[ $env_dump =~ ^(.+OPEN_DKIM)= ]] ; then
   if [ ! -z "${BASH_REMATCH[1]}" ]; then
     echo "OPEN_DKIM env set, enabling email signing"
-    remove_opendkim # Remove first, to refresh IP info
     add_opendkim
   fi
 else
