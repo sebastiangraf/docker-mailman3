@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# Update hostname if given
+if [ -f /mail_settings/myhostname ]; then
+	echo $(sed 's:/:\\/:g' /mail_settings/myhostname) > /etc/mailname
+fi
+
 readarray -t domains < /mail_settings/domains
 first_fqdn="\$myhostname = \"${domains[0]}\";"
 domain_string=$(printf "'%s' " "${domains[@]}") | tr ' ' ,
