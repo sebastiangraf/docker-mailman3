@@ -13,9 +13,13 @@ use strict;
 
 # See http://opensource.apple.com/source/amavisd/amavisd-114/amavisd/amavisd-new-2.4.4/amavisd.conf-sample
 # for details on asterisk reinjection configuration
-$forward_method = 'smtp:*:*';
-$notify_method = 'smtp:*:*';
+$forward_method = 'smtp:*:10025';
+$notify_method = $forward_method;
 
+# Bind on all interfaces (needed to expose this to linked containers)
+$inet_socket_bind = '0.0.0.0';
+# Accept incoming requests from all addresses (change if used outside of linked containers!)
+@inet_acl = qw( ::/0 );
 
 #------------ Do not modify anything below this line -------------
 1;  # ensure a defined return

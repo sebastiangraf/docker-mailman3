@@ -1,4 +1,4 @@
-Dockermail - MAJOR RESTRUCTURE GOING ON, WORK IN PROGRESS!
+Dockermail
 ==========
 
 A secure, minimal-configuration mail service in docker containers.
@@ -8,6 +8,7 @@ The setup is modular and so far has (more to come, feel free to contribute :)
 
 * `email_core` -  base SMTP and IMAP server
 * `opendkim` - adds DKIM signing service to the core
+* `amavis` - adds incoming SPAM filter
 
 Please see the README in each folder for more information on each image.
 
@@ -26,4 +27,4 @@ and it will spin up both container and link them together, easy!
 
 
 ### Coming soon
-* Incoming SPAM filter!
+* Images on DockerHub

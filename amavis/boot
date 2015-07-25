@@ -1,12 +1,10 @@
 #!/bin/bash
-
-if [ -f /mail_settings/myhostname ]; then
-	echo $(sed 's:/:\\/:g' /mail_settings/myhostname) > /etc/mailname
-fi
-
 readarray -t domains < /mail_settings/domains
-domain_suffix=$(printf ", \"%s\"" "${domains[@]}")
-domain_string="@local_domains_acl = ( \".$mydomain\" $domain_suffix );"
+first_fqdn="\$myhostname = \"${domains[0]}\";"
+domain_string=$(printf "'%s' " "${domains[@]}") | tr ' ' ,
+domain_acl="@local_domains_acl = ( $domain_string );"
 
+sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/05-node_id -i
 sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/50-user -i
-sed "/# DOCKERMAIL DOMAINS START/a $domain_string/" /etc/amavis/conf.d/50-user -i
+sed "/# DOCKERMAIL DOMAINS START/a $first_fqdn" /etc/amavis/conf.d/05-node_id -i
+sed "/# DOCKERMAIL DOMAINS START/a $domain_acl" /etc/amavis/conf.d/50-user -i

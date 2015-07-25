@@ -4,7 +4,8 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
 
 # Prerequisites
-RUN apt-get update && apt-get install -y \
+RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
+    apt-get update && apt-get install -y \
     amavisd-new \
     spamassassin \
     libnet-dns-perl \
@@ -17,6 +18,7 @@ RUN apt-get update && apt-get install -y \
 # Set up razor and pyzor
 RUN su - amavis -s /bin/bash && razor-admin -create && razor-admin -register && pyzor discover
 
+COPY ./config/05-node_id /etc/amavis/conf.d/05-node_id
 COPY ./config/15-content_filter_mode /etc/amavis/conf.d/15-content_filter_mode
 COPY ./config/50-user /etc/amavis/conf.d/50-user
 
