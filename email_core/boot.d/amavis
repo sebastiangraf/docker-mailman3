@@ -51,8 +51,8 @@ function add_amavis () {
     echo "  -o smtpd_end_of_data_restrictions=" >> $POSTFIX_MASTER_CF
     # Painfull way to get amavis IP
     amavis_ip=$(getent hosts amavis | awk '{print $1}')
-    echo "  -o mynetworks=127.0.0.0/8 $amavis_ip" >> $POSTFIX_MASTER_CF
-    
+    echo "  -o mynetworks=127.0.0.0/8, $amavis_ip" >> $POSTFIX_MASTER_CF
+
     echo "  -o smtpd_error_sleep_time=0" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_soft_error_limit=1001" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_hard_error_limit=1000" >> $POSTFIX_MASTER_CF
