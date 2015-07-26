@@ -14,3 +14,10 @@ sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/
 sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/50-user -i
 sed "/# DOCKERMAIL DOMAINS START/a $first_fqdn" /etc/amavis/conf.d/05-node_id -i
 sed "/# DOCKERMAIL DOMAINS START/a $domain_acl" /etc/amavis/conf.d/50-user -i
+
+
+ln -sf /dev/stdout /var/log/razor-agent.log
+ln -sf /dev/stdout /var/log/mail.log
+ln -sf /dev/stdout /var/log/mail.info
+ln -sf /dev/stdout /var/log/mail.warn
+ln -sf /dev/stderr /var/log/mail.err
