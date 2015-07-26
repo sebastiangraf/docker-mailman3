@@ -43,5 +43,11 @@ VOLUME ["/vmail"]
 RUN groupadd -g 5000 vmail
 RUN useradd -g vmail -u 5000 vmail -d /vmail -m
 
+# Redirect logs for Docker to pickup
+RUN ln -sf /dev/stdout /var/log/mail.log
+RUN ln -sf /dev/stdout /var/log/mail.info
+RUN ln -sf /dev/stdout /var/log/mail.warn
+RUN ln -sf /dev/stderr /var/log/mail.err
+
 EXPOSE 25 143 587
-ENTRYPOINT /boot; service rsyslog start; service postfix start; dovecot -F
+ENTRYPOINT /boot; service postfix start; dovecot -F

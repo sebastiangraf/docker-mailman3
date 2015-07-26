@@ -5,8 +5,7 @@ RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
 
 # Prerequisites
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
-    apt-get update && apt-get install -y \
-    opendkim && \
+    apt-get update && apt-get install -y opendkim && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -19,6 +18,12 @@ RUN chmod 755 /boot
 
 ENV OPEN_DKIM=true
 
+# Redirect logs for Docker to pickup
+RUN ln -sf /dev/stdout /var/log/mail.log
+RUN ln -sf /dev/stdout /var/log/mail.info
+RUN ln -sf /dev/stdout /var/log/mail.warn
+RUN ln -sf /dev/stderr /var/log/mail.err
+
 EXPOSE 8891
 
-ENTRYPOINT /boot; service rsyslog start; opendkim -f -p inet:8891@0.0.0.0
+ENTRYPOINT /boot; opendkim -f -p inet:8891@0.0.0.0

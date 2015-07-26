@@ -31,6 +31,13 @@ RUN chmod 755 /boot
 
 ENV AMAVIS=true
 
+# Redirect logs for Docker to pickup
+RUN ln -sf /dev/stdout /var/log/razor-agent.log
+RUN ln -sf /dev/stdout /var/log/mail.log
+RUN ln -sf /dev/stdout /var/log/mail.info
+RUN ln -sf /dev/stdout /var/log/mail.warn
+RUN ln -sf /dev/stderr /var/log/mail.err
+
 EXPOSE 10024
 
-ENTRYPOINT ./boot; service rsyslog start; amavisd-new foreground
+ENTRYPOINT ./boot; amavisd-new foreground
