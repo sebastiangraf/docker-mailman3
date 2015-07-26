@@ -45,7 +45,7 @@ function add_amavis () {
     echo "  -o smtpd_delay_reject=no" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_client_restrictions=permit_mynetworks,reject" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_helo_restrictions=" >> $POSTFIX_MASTER_CF
-    echo "  -o smtpd_sender_restrictions=" >> $POSTFIX_MASTER_CF
+    echo "  -o smtpd_sender_restrictions=permit_mynetworks,reject" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_recipient_restrictions=permit_mynetworks,reject" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_data_restrictions=reject_unauth_pipelining" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_end_of_data_restrictions=" >> $POSTFIX_MASTER_CF
