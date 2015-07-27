@@ -9,6 +9,8 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+COPY ./config/rsyslog.conf /etc/rsyslog.conf
+
 # Nice place for your settings
 VOLUME ["/mail_settings"]
 
@@ -19,4 +21,4 @@ RUN chmod 755 /boot
 ENV OPEN_DKIM=true
 
 EXPOSE 8891
-ENTRYPOINT /boot; opendkim -f -p inet:8891@0.0.0.0
+ENTRYPOINT /boot; opendkim -p inet:8891@0.0.0.0; rsyslogd -n

@@ -21,6 +21,7 @@ RUN su - amavis -s /bin/bash && razor-admin -create && razor-admin -register && 
 COPY ./config/05-node_id /etc/amavis/conf.d/05-node_id
 COPY ./config/15-content_filter_mode /etc/amavis/conf.d/15-content_filter_mode
 COPY ./config/50-user /etc/amavis/conf.d/50-user
+COPY ./config/rsyslog.conf /etc/rsyslog.conf
 
 # Nice place for your settings
 VOLUME ["/mail_settings"]
@@ -32,4 +33,4 @@ RUN chmod 755 /boot
 ENV AMAVIS=true
 
 EXPOSE 10024
-ENTRYPOINT ./boot; amavisd-new foreground
+ENTRYPOINT ./boot; amavisd-new; rsyslogd -n

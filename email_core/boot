@@ -47,10 +47,6 @@ chmod u+w /vmail
 # Add password file
 cp /mail_settings/passwords /etc/dovecot/passwd
 
-ln -sf /dev/stdout /var/log/mail.log
-ln -sf /dev/stdout /var/log/mail.info
-ln -sf /dev/stdout /var/log/mail.warn
-ln -sf /dev/stderr /var/log/mail.err
 
 # Run boot scripts
 for SCRIPT in /boot.d/*

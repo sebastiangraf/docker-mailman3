@@ -18,8 +18,8 @@ $notify_method = $forward_method;
 
 # Bind on all interfaces (needed to expose this to linked containers)
 $inet_socket_bind = '0.0.0.0';
-# Accept incoming requests from all addresses (change if used outside of linked containers!)
-@inet_acl = qw( ::/0 );
+# Accept incoming requests from private ip range
+@inet_acl = qw(172.0.0.0/8);
 
 #------------ Do not modify anything below this line -------------
 1;  # ensure a defined return

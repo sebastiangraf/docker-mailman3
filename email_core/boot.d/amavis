@@ -15,8 +15,8 @@ function remove_amavis () {
     sed "/$AMAVIS_CONFIG_HEADER/,/$AMAVIS_CONFIG_FOOTER/d" "$POSTFIX_MAIN_CF" -i
   fi
   # master.cf
-  sed '/^pickup/,/^cleanup/{//!d}' POSTFIX_MASTER_CF -i
-  sed "/$AMAVIS_CONFIG_HEADER/,/$AMAVIS_CONFIG_FOOTER/d" POSTFIX_MASTER_CF -i
+  sed '/^pickup/,/^cleanup/{//!d}' "$POSTFIX_MASTER_CF" -i
+  sed "/$AMAVIS_CONFIG_HEADER/,/$AMAVIS_CONFIG_FOOTER/d" "$POSTFIX_MASTER_CF" -i
 }
 
 function add_amavis () {
@@ -43,14 +43,14 @@ function add_amavis () {
     echo "  -o relay_recipient_maps=" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_restriction_classes=" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_delay_reject=no" >> $POSTFIX_MASTER_CF
-    echo "  -o smtpd_client_restrictions=" >> $POSTFIX_MASTER_CF
+    echo "  -o smtpd_client_restrictions=permit_mynetworks,reject" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_helo_restrictions=" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_sender_restrictions=" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_recipient_restrictions=permit_mynetworks,reject" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_data_restrictions=reject_unauth_pipelining" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_end_of_data_restrictions=" >> $POSTFIX_MASTER_CF
     # Allow the private ip range 172.x.x.x that Docker apparently uses
-    echo "  -o mynetworks=127.0.0.0/8,172.0.0.0/8" >> $POSTFIX_MASTER_CF
+    echo "  -o mynetworks=172.0.0.0/8" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_error_sleep_time=0" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_soft_error_limit=1001" >> $POSTFIX_MASTER_CF
     echo "  -o smtpd_hard_error_limit=1000" >> $POSTFIX_MASTER_CF
