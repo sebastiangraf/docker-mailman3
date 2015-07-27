@@ -1,5 +1,5 @@
-emailcore:
-  build: ./email_core
+core:
+  build: ./core
   ports:
     - "25:25"
     - "143:143"

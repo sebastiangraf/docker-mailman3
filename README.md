@@ -6,7 +6,7 @@ This repository is tailored to small private servers, where you own a domain and
 
 The setup is modular and so far has (more to come, feel free to contribute :)
 
-* `email_core` -  base SMTP and IMAP server
+* `core` -  base SMTP and IMAP server
 * `opendkim` - adds DKIM signing service to the core
 * `amavis` - adds incoming SPAM filter
 
