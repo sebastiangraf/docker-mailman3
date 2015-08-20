@@ -27,4 +27,6 @@ and it will spin up both container and link them together, easy!
 
 
 ### Coming soon
+* JSON based config instead of current collection of flat files.
 * Images on DockerHub
+* Testing
