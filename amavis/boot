@@ -5,9 +5,9 @@ if [ -f /mail_settings/myhostname ]; then
 	echo $(sed 's:/:\\/:g' /mail_settings/myhostname) > /etc/mailname
 fi
 
-readarray -t domains < /mail_settings/domains
-first_fqdn="\$myhostname = \"${domains[0]}\";"
-domain_string=$(printf "'%s' " "${domains[@]}") | tr ' ' ,
+DOMAINS_FILE_NAME="/mail_settings/domains"
+first_fqdn="\$myhostname = \"$(grep -v "^\s*$" $DOMAINS_FILE_NAME | head -n 1)\";"
+domain_string=$(grep -v -e "^\s*$" $DOMAINS_FILE_NAME | while read -r line; do echo "'$line'"; done | paste -s -d ',')
 domain_acl="@local_domains_acl = ( $domain_string );"
 
 sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/05-node_id -i
