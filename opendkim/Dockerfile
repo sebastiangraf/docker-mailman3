@@ -1,4 +1,4 @@
-FROM ubuntu:14.10
+FROM ubuntu:15.04
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
