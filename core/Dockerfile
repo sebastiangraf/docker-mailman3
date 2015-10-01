@@ -2,6 +2,8 @@ FROM ubuntu:14.10
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
+# https://github.com/docker/docker/issues/6345
+RUN alias adduser='useradd'
 
 # Prerequisites
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
