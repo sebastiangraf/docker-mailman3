@@ -1,4 +1,4 @@
-FROM ubuntu:15.04
+FROM ubuntu:15.10
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
@@ -6,6 +6,7 @@ RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
 # Prerequisites
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     apt-get update && apt-get install -y \
+    rsyslog \
     amavisd-new \
     spamassassin \
     libnet-dns-perl \
