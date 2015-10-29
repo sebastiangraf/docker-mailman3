@@ -1,5 +1,4 @@
 ssl = required
 disable_plaintext_auth = yes
-ssl_cert = </etc/dovecot/dovecot.pem
-ssl_key = </etc/dovecot/private/dovecot.pem
-
+ssl_cert = </etc/ssl/certs/ssl-cert-snakeoil.pem
+ssl_key = </etc/ssl/private/ssl-cert-snakeoil.key
