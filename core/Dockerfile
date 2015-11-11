@@ -3,6 +3,9 @@ FROM ubuntu:15.10
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
 
+# Allow dovecot install to succeed (see docker/docker#1024)
+RUN dpkg-divert --local --rename --add /sbin/initctl && ln -s -f /bin/true /sbin/initctl
+
 # Prerequisites
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     apt-get update && apt-get install -y \
