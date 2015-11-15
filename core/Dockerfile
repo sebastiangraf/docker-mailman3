@@ -3,18 +3,15 @@ FROM ubuntu:15.10
 ENV DEBIAN_FRONTEND noninteractive
 RUN locale-gen en_GB en_GB.UTF-8 && dpkg-reconfigure locales
 
-# Allow dovecot install to succeed (see docker/docker#1024)
-RUN dpkg-divert --local --rename --add /sbin/initctl && ln -s -f /bin/true /sbin/initctl
-
 # Prerequisites
-RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
-    apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     rsyslog \
     ssl-cert \
     postfix \
     dovecot-imapd && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 # Postfix configuration
 ADD ./config/postfix.main.cf /etc/postfix/main.cf

@@ -25,6 +25,11 @@ Assuming you follow the instructions in the accompanying READMEs to set up both 
 
 and it will spin up both container and link them together, easy!
 
+### Testing & Development
+I have included a `Vagrantfile`, which currently lets you test build the images in a neutral enviroment.
+If you have issues building or are making changes to the build, run `vagrant up` to spin up and build images in a VM.
+
+(You will need [Vagrant](https://www.vagrantup.com/) installed for this to work)
 
 ### Coming soon
 * JSON based config instead of current collection of flat files.
