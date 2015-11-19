@@ -47,6 +47,10 @@ chmod u+w /vmail
 # Add password file
 cp /mail_settings/passwords /etc/dovecot/passwd
 
+# Remove defunct rsyslog PID, so it does not complain on restart
+if [ -f /var/run/rsyslogd.pid ]; then
+	rm /var/run/rsyslogd.pid
+fi
 
 # Run boot scripts
 for SCRIPT in /boot.d/*
