@@ -27,7 +27,7 @@ cp /mail_settings/aliases /etc/postfix/virtual
 cp /mail_settings/domains /etc/postfix/virtual-mailbox-domains
 
 # Parse mailbox settings
-mkdir /etc/postfix/tmp
+mkdir -p /etc/postfix/tmp
 awk < /etc/postfix/virtual '{ print $2 }' > /etc/postfix/tmp/virtual-receivers
 sed -r 's,(.+)@(.+),\2/\1/,' /etc/postfix/tmp/virtual-receivers > /etc/postfix/tmp/virtual-receiver-folders
 paste /etc/postfix/tmp/virtual-receivers /etc/postfix/tmp/virtual-receiver-folders > /etc/postfix/virtual-mailbox-maps
@@ -47,6 +47,10 @@ chmod u+w /vmail
 # Add password file
 cp /mail_settings/passwords /etc/dovecot/passwd
 
+# Remove defunct rsyslog PID, so it does not complain on restart
+if [ -f /var/run/rsyslogd.pid ]; then
+	rm /var/run/rsyslogd.pid
+fi
 
 # Run boot scripts
 for SCRIPT in /boot.d/*

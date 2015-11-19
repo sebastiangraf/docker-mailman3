@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Remove defunct rsyslog PID, so it does not complain on restart
+if [ -f /var/run/rsyslogd.pid ]; then
+	rm /var/run/rsyslogd.pid
+fi
+
 # Copy OpenDKIM config
 cp /mail_settings/opendkim.conf /etc/opendkim.conf
 cp /mail_settings/mail.private /etc/dkim.key
