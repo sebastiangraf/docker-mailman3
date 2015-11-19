@@ -31,7 +31,12 @@ If you have issues building or are making changes to the build, run `vagrant up`
 
 (You will need [Vagrant](https://www.vagrantup.com/) installed for this to work)
 
+### Images on DockerHub
+Automated builds of the images are available here:
+* Core: https://hub.docker.com/r/adaline/dockermail-core/
+* OpenDKIM: https://hub.docker.com/r/adaline/dockermail-opendkim/
+* Amavis: https://hub.docker.com/r/adaline/dockermail-amavis/
+
 ### Coming soon
 * JSON based config instead of current collection of flat files.
-* Images on DockerHub
 * Testing
