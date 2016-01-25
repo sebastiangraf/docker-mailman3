@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     rsyslog \
     ssl-cert \
     postfix \
-    dovecot-imapd && \
+    dovecot-imapd \
+    jq && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d

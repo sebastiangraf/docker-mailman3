@@ -12,7 +12,8 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     libnet-dns-perl \
     libmail-spf-perl \
     pyzor \
-    razor && \
+    razor \
+    jq && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

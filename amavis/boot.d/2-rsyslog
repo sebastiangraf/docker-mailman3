@@ -1,0 +1,7 @@
+#!/bin/bash
+echo 'Running rsyslog config'
+
+# Remove defunct rsyslog PID, so it does not complain on restart
+if [ -f /var/run/rsyslogd.pid ]; then
+	rm /var/run/rsyslogd.pid
+fi

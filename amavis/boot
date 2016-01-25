@@ -1,21 +1,15 @@
 #!/bin/bash
 
-# Update hostname if given
-if [ -f /mail_settings/myhostname ]; then
-	echo $(sed 's:/:\\/:g' /mail_settings/myhostname) > /etc/mailname
+export CONFIG_FILE=/mail_settings/config.json
+
+if [ -f "$CONFIG_FILE" ]; then
+  # Run boot scripts
+  for SCRIPT in ./boot.d/*
+  do
+    if [ -f "$SCRIPT" -a -x "$SCRIPT" ]; then
+      "$SCRIPT"
+    fi
+  done
+else
+  echo "Cant find config JSON, giving up."
 fi
-
-# Remove defunct rsyslog PID, so it does not complain on restart
-if [ -f /var/run/rsyslogd.pid ]; then
-	rm /var/run/rsyslogd.pid
-fi
-
-DOMAINS_FILE_NAME="/mail_settings/domains"
-first_fqdn="\$myhostname = \"$(grep -v "^\s*$" $DOMAINS_FILE_NAME | head -n 1)\";"
-domain_string=$(grep -v -e "^\s*$" $DOMAINS_FILE_NAME | while read -r line; do echo "'$line'"; done | paste -s -d ',')
-domain_acl="@local_domains_acl = ( $domain_string );"
-
-sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/05-node_id -i
-sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/50-user -i
-sed "/# DOCKERMAIL DOMAINS START/a $first_fqdn" /etc/amavis/conf.d/05-node_id -i
-sed "/# DOCKERMAIL DOMAINS START/a $domain_acl" /etc/amavis/conf.d/50-user -i
