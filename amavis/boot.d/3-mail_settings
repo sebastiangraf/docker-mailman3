@@ -1,0 +1,11 @@
+#!/bin/bash
+echo 'Running amavis config'
+
+first_fqdn="\$myhostname = \"$(jq -r '.domains | keys | .[0]' "$CONFIG_FILE")\";"
+domain_string=$(jq '.domains | keys | .[]' "$CONFIG_FILE" | paste -s -d ',')
+domain_acl="@local_domains_acl = ( $domain_string );"
+
+sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/05-node_id -i
+sed "/# DOCKERMAIL DOMAINS START/,/# DOCKERMAIL DOMAINS END/{//!d}" /etc/amavis/conf.d/50-user -i
+sed "/# DOCKERMAIL DOMAINS START/a $first_fqdn" /etc/amavis/conf.d/05-node_id -i
+sed "/# DOCKERMAIL DOMAINS START/a $domain_acl" /etc/amavis/conf.d/50-user -i

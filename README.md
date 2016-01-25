@@ -12,6 +12,12 @@ The setup is modular and so far has (more to come, feel free to contribute :)
 
 Please see the README in each folder for more information on each image.
 
+---
+# Config changes
+New version has replaced the previous collection of flat files with a single `config.json` file, please see `core` README for details on syntax. You will need to update your configuration to upgrade to new dockermail version.
+
+---
+
 ### SPAM
 Although OpenDKIM is optional, I highly recommended you use it unless you want your mail to end up in someone's spam folder. See the README in `opendkim` folder for more info on setting it up.
 
@@ -21,7 +27,9 @@ And finally, generate and add an SPF record to your domain, search for instructi
 ### Compose
 Assuming you follow the instructions in the accompanying READMEs to set up both containers, you should just be able to run
 
-		docker-compose up
+```bash
+docker-compose up
+```
 
 and it will spin up both container and link them together, easy!
 
@@ -38,5 +46,4 @@ Automated builds of the images are available here:
 * Amavis: https://hub.docker.com/r/adaline/dockermail-amavis/
 
 ### Coming soon
-* JSON based config instead of current collection of flat files.
 * Testing

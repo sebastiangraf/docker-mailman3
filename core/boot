@@ -1,61 +1,15 @@
 #!/bin/bash
 
-# Check if we have SSL certificates in config, otherwise copy it there
-# First the key file
-if [ -f /mail_settings/ssl-cert-snakeoil.key ]; then
-	cp /mail_settings/ssl-cert-snakeoil.key /etc/ssl/private/ssl-cert-snakeoil.key
+export CONFIG_FILE=/mail_settings/config.json
+
+if [ -f "$CONFIG_FILE" ]; then
+  # Run boot scripts
+  for SCRIPT in ./boot.d/*
+  do
+    if [ -f "$SCRIPT" -a -x "$SCRIPT" ]; then
+      "$SCRIPT"
+    fi
+  done
 else
-	cp /etc/ssl/private/ssl-cert-snakeoil.key /mail_settings/ssl-cert-snakeoil.key
+  echo "Cant find config JSON, giving up."
 fi
-
-# Then the pem file
-if [ -f /mail_settings/ssl-cert-snakeoil.pem ]; then
-	cp /mail_settings/ssl-cert-snakeoil.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
-else
-	cp /etc/ssl/certs/ssl-cert-snakeoil.pem /mail_settings/ssl-cert-snakeoil.pem
-fi
-
-
-# Update hostname if given
-if [ -f /mail_settings/myhostname ]; then
-	sed -i -e "s/myhostname = localhost/myhostname = $(sed 's:/:\\/:g' /mail_settings/myhostname)/" /etc/postfix/main.cf
-	echo $(sed 's:/:\\/:g' /mail_settings/myhostname) > /etc/mailname
-fi
-
-# Configure mail delivery to dovecot
-cp /mail_settings/aliases /etc/postfix/virtual
-cp /mail_settings/domains /etc/postfix/virtual-mailbox-domains
-
-# Parse mailbox settings
-mkdir -p /etc/postfix/tmp
-awk < /etc/postfix/virtual '{ print $2 }' > /etc/postfix/tmp/virtual-receivers
-sed -r 's,(.+)@(.+),\2/\1/,' /etc/postfix/tmp/virtual-receivers > /etc/postfix/tmp/virtual-receiver-folders
-paste /etc/postfix/tmp/virtual-receivers /etc/postfix/tmp/virtual-receiver-folders > /etc/postfix/virtual-mailbox-maps
-
-# Give postfix ownership of its files
-chown -R postfix:postfix /etc/postfix
-
-# Map virtual aliases and user/filesystem mappings
-postmap /etc/postfix/virtual
-postmap /etc/postfix/virtual-mailbox-maps
-chown -R postfix:postfix /etc/postfix
-
-# Make user vmail own all mail folders
-chown -R vmail:vmail /vmail
-chmod u+w /vmail
-
-# Add password file
-cp /mail_settings/passwords /etc/dovecot/passwd
-
-# Remove defunct rsyslog PID, so it does not complain on restart
-if [ -f /var/run/rsyslogd.pid ]; then
-	rm /var/run/rsyslogd.pid
-fi
-
-# Run boot scripts
-for SCRIPT in /boot.d/*
-do
-  if [ -f "$SCRIPT" -a -x "$SCRIPT" ]; then
-    "$SCRIPT"
-  fi
-done
