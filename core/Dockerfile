@@ -15,29 +15,21 @@ RUN apt-get update && apt-get install -y \
     echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 # Postfix configuration
-ADD ./config/postfix.main.cf /etc/postfix/main.cf
-ADD ./config/postfix.master.cf.append /etc/postfix/master-additional.cf
+ADD ./config/postfix /etc/postfix/
 RUN cat /etc/postfix/master-additional.cf >> /etc/postfix/master.cf
 
 # Dovecot configuration
-COPY ./config/dovecot.mail /etc/dovecot/conf.d/10-mail.conf
-COPY ./config/dovecot.ssl /etc/dovecot/conf.d/10-ssl.conf
-COPY ./config/dovecot.auth /etc/dovecot/conf.d/10-auth.conf
-COPY ./config/dovecot.master /etc/dovecot/conf.d/10-master.conf
-COPY ./config/dovecot.lda /etc/dovecot/conf.d/15-lda.conf
-COPY ./config/dovecot.imap /etc/dovecot/conf.d/20-imap.conf
-# Uncomment to add verbose logging
-# COPY ./config/dovecot.logging /etc/dovecot/conf.d/10-logging.conf
+COPY ./config/dovecot /etc/dovecot/conf.d/
 COPY ./config/rsyslog.conf /etc/rsyslog.conf
-
-# Nice place for your settings
-VOLUME ["/mail_settings"]
 
 # Copy boot scripts
 COPY boot /
 RUN chmod 755 /boot
 COPY boot.d /boot.d
 RUN chmod -R 755 /boot.d
+
+# Nice place for your settings
+VOLUME ["/mail_settings"]
 
 # Volume to store email
 VOLUME ["/vmail"]

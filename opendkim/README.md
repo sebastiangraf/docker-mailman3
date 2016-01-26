@@ -1,16 +1,13 @@
 Dockermail - OpenDKIM
 ===
 Once configured and linked to the `email_core`, this image will provide DKIM singing for your mail.
-Please see http://www.opendkim.org/ for more information on OpenDKIM.
 
 ### Configuration
 To get going you need to generate a key and set up your domain records, see https://help.ubuntu.com/community/Postfix/DKIM for details on doing this.
 
-This images uses settings files in an attached volume to configure the container on boot.
-You can place these in the same folder as the `email_core`'s settings for easy administration.
+This image looks for key files in an attached volume to configure domain signing on boot.
+Once you generate the private key, rename it with your domain: `[your-domain.tld].opendkim_key` and add it to the mounted settings folder.
 
-  * `opendkim.conf`
-  You will find this file in the './config', change `Domain` to your own domain.
+For example, if your domain is `awesome-company.co.uk`, then name the key for it `awesome-company.co.uk.opendkim_key`.
 
-  * `mail.private`
-  You will need to generate this private key file and use the public key in your domain's DNS setup, see the link above for details.
+Container will import and process these keys on boot, if you add or change keys - just restart the container for changes to take effect.

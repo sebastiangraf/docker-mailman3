@@ -8,7 +8,8 @@ chomp($myhostname = `hostname --fqdn`);
 # To manually set $myhostname, edit the following line with the correct Fully
 # Qualified Domain Name (FQDN) and remove the # at the beginning of the line.
 #
-#$myhostname = "mail.example.com";
+# $myhostname = "mail.example.com";
+#
 # DOCKERMAIL DOMAINS START
 # DOCKERMAIL DOMAINS END
 

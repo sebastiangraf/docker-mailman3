@@ -1,5 +1,5 @@
 #!/bin/bash
-echo 'Running mail settings config'
+echo "Running `basename "$0"`"
 
 # Build alias maps
 jq -r '.domains | .[] | select(.[0] != null) | .[] | select(has("aliases")) | .email as $email | .aliases | .[] | [., $email] | join("\t")' "$CONFIG_FILE" > /etc/postfix/virtual

@@ -10,6 +10,8 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY ./config/rsyslog.conf /etc/rsyslog.conf
+COPY ./config/opendkim /etc/opendkim
+COPY ./config/opendkim.conf etc/opendkim.conf
 
 # Nice place for your settings
 VOLUME ["/mail_settings"]

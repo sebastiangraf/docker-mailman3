@@ -4,7 +4,7 @@ Dockermail
 A secure, minimal-configuration mail service in docker containers.
 This repository is tailored to small private servers, where you own a domain and want to host your own mail.
 
-The setup is modular and so far has (more to come, feel free to contribute :)
+The setup is modular and so far has:
 
 * `core` -  base SMTP and IMAP server
 * `opendkim` - adds DKIM signing service to the core
@@ -19,7 +19,7 @@ New version has replaced the previous collection of flat files with a single `co
 ---
 
 ### SPAM
-Although OpenDKIM is optional, I highly recommended you use it unless you want your mail to end up in someone's spam folder. See the README in `opendkim` folder for more info on setting it up.
+Although OpenDKIM is optional, I highly recommended you use it to help your message across spam filters. See the README in `opendkim` folder for more info on setting it up.
 
 You should also add PTR record to your IP (aka Reverse DNS) which is done by your server provider.
 And finally, generate and add an SPF record to your domain, search for instructions on this - there are a few generator site around and the setup steps depend on your domain name provider.
@@ -32,6 +32,7 @@ docker-compose up
 ```
 
 and it will spin up both container and link them together, easy!
+See `docker-compose.yml` for details.
 
 ### Testing & Development
 I have included a `Vagrantfile`, which currently lets you test build the images in a neutral enviroment.
@@ -47,3 +48,5 @@ Automated builds of the images are available here:
 
 ### Coming soon
 * Testing
+* Mulit-domain OpenDKIM config
+* Easy password generation

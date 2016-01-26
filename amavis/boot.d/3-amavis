@@ -1,5 +1,5 @@
 #!/bin/bash
-echo 'Running amavis config'
+echo "Running `basename "$0"`"
 
 first_fqdn="\$myhostname = \"$(jq -r '.domains | keys | .[0]' "$CONFIG_FILE")\";"
 domain_string=$(jq '.domains | keys | .[]' "$CONFIG_FILE" | paste -s -d ',')

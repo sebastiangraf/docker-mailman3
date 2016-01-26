@@ -1,5 +1,5 @@
 #!/bin/bash
-echo 'Running SSL config'
+echo "Running `basename "$0"`"
 
 # Check if we have SSL certificates in config, otherwise copy it there
 # First the key file
