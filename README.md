@@ -48,5 +48,4 @@ Automated builds of the images are available here:
 
 ### Coming soon
 * Testing
-* Mulit-domain OpenDKIM config
 * Easy password generation
