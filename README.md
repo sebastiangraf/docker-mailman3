@@ -41,4 +41,3 @@ Automated builds of the images are available here:
 
 ### Coming soon
 * Testing
-* Easy password generation
