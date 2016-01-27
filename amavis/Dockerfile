@@ -20,9 +20,7 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
 # Set up razor and pyzor
 RUN su - amavis -s /bin/bash && razor-admin -create && razor-admin -register && pyzor discover
 
-COPY ./config/05-node_id /etc/amavis/conf.d/05-node_id
-COPY ./config/15-content_filter_mode /etc/amavis/conf.d/15-content_filter_mode
-COPY ./config/50-user /etc/amavis/conf.d/50-user
+COPY ./config/conf.d /etc/amavis/conf.d
 COPY ./config/rsyslog.conf /etc/rsyslog.conf
 
 # Nice place for your settings

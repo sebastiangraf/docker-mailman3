@@ -47,27 +47,39 @@ The hash within *config.json* contains 2 primary keys: `domains` and `settings`.
 * `myhostname` - should be the fully qualified domain of the server hosting email. Although optional you will have problems with EHLO commands and `amavis` without it.
 
 #### domains
-Is an object of account arrays, the key is the domain for which you want to process email, each account has the following keys:
+Each domain has an array of account objects, each account has the following keys:
 * `email` - email address of the account. Will also be used as the login.
-* `password` - password for the account. See example for using plain-text passwords. To get more secure hash values, you can either install dovecot locally or use `docker exec -it [email_core_container_name] bash` to attach to the running container (step 6) and run `doveadm pw -s <scheme-name>` inside.
-See [Dovecot Wiki](http://wiki.dovecot.org/Authentication/PasswordSchemes) for more info.
+* `password` - password for the account. See below for details.
 * `aliases` - (Optional) Array of aliases to redirect to this account. For a catch-all use your domain with no account, eg: `@example.com`.
 
-## Build and run
+##### Generating passwords
+Passwords have to be in a dovecot format.
 
-#### Build container
+A plain-text password looks like this: `{PLAIN}SuperSecure123`.
+
+To get more secure hash values, you need to start the container and run:
 ```bash
-docker build -t dockermail_email_core .
+docker exec -it [email_core_container_name] doveadm pw -s [scheme-name]
 ```
-#### Run
-To run container add mount points for settings and mail plus SMTP ports 25/587 and IMAP port 143 to host:
+This will attach to a running container, prompt you for a password and provide a hash. For example:
+```bash
+> docker exec -it dockermail_core_1 doveadm pw -s SHA512-CRYPT
+Enter new password:
+Retype new password:
+{SHA512-CRYPT}$6$OA/BzvLzf7C9uohz$a9B0kCihcHsfnK.x4xJWHs9V7.eR5crVtSUn6hoe6p03oea34.uxkozRUw7RYu13z26xNniY3M1kZu4CgSVaB/
+```
+See [Dovecot Wiki](http://wiki.dovecot.org/Authentication/PasswordSchemes) for more details on different schemes.
+
+## Run
+Using the pre-built image from docker hub, you can start your email by running:
 ```bash
 docker run -name dockermail -d \
 -p 25:25 -p 587:587 -p 143:143 \
 -v /opt/dockermail/settings:/mail_settings \
 -v /opt/dockermail/vmail:/vmail \
-dockermail_email_core
+adaline/dockermail-core
 ```
+This will connect SMTP ports 25/587 and IMAP port 143 to host and mount the folders as per examples given above.
 
 ## SSL
 Container will produce own SSL keys and back these up into the settings folder. These files are:
