@@ -1,6 +1,6 @@
 Dockermail - OpenDKIM
 ===
-Once configured and linked to the `core`, this image will sign for your outgoing mail and help you stay clear of the SPAM folder.
+Once configured and linked to the `core`, this image will sign your outgoing mail and help you stay clear of the SPAM folder.
 
 ### Configuration
 This image looks for key files in an attached settings volume. The configuration will be generated based on the key's filename.
