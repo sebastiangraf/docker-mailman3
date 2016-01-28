@@ -24,9 +24,7 @@ COPY ./config/rsyslog.conf /etc/rsyslog.conf
 
 # Copy boot scripts
 COPY boot /
-RUN chmod 755 /boot
 COPY boot.d /boot.d
-RUN chmod -R 755 /boot.d
 
 # Nice place for your settings
 VOLUME ["/mail_settings"]
