@@ -24,6 +24,7 @@ VOLUME ["/mail_settings"]
 COPY boot /
 # And the key generation script
 COPY keygen /
+RUN chmod 755 /boot /keygen
 
 ENV OPEN_DKIM=true
 

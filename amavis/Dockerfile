@@ -29,6 +29,7 @@ VOLUME ["/mail_settings"]
 # Copy boot scripts
 COPY boot /
 COPY boot.d /boot.d
+RUN chmod 755 /boot /boot.d/*
 
 ENV AMAVIS=true
 
