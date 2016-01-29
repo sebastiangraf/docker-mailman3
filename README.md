@@ -10,6 +10,10 @@ The setup is modular and has:
 
 Please see the README in each folder for more information.
 
+## Getting started
+ Check out this post:
+ [Easy private email hosting with dockermail](http://madespecial.co.uk/blog/2016/1/28/easy-private-email-hosting-with-dockermail)
+
 ---
 # Config changes
 New version has replaced the previous collection of flat files with a single `config.json` file, please see `core` README for details on syntax. You will need to update your configuration to upgrade to new dockermail version.
