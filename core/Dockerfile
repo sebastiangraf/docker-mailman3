@@ -38,4 +38,4 @@ RUN groupadd -g 5000 vmail
 RUN useradd -g vmail -u 5000 vmail -d /vmail -m
 
 EXPOSE 25 143 587
-ENTRYPOINT /boot; service postfix start; service dovecot start; rsyslogd -n
+CMD /boot; service postfix start; service dovecot start; rsyslogd -n
