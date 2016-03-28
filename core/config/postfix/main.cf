@@ -34,6 +34,7 @@ relayhost =
 mynetworks = 127.0.0.0/8 172.0.0.0/8
 mailbox_size_limit = 0
 recipient_delimiter = +
+message_size_limit = 52428800
 
 # SMTP configuration for incoming mail (port 25)
 # Outgoing mail (port 587) configuration  is specified in master.cf
