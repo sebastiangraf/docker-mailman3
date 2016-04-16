@@ -3,6 +3,7 @@ echo "Running `basename "$0"`"
 
 # Build alias maps
 jq -r '.domains | .[] | select(.[0] != null) | .[] | select(has("aliases")) | .email as $email | .aliases | .[] | [., $email] | join("\t")' "$CONFIG_FILE" > /etc/postfix/virtual
+jq -r 'select(has("aliases")) | .aliases | .[] | [.from, .to] | join("\t")' "$CONFIG_FILE" >> /etc/postfix/virtual
 # Build domain maps
 jq -r '.domains | keys | .[]' "$CONFIG_FILE" > /etc/postfix/virtual-mailbox-domains
 # Build mailbox maps
@@ -25,3 +26,6 @@ chmod u+w /sieve
 
 # Build a password file
 jq -r '.domains | .[] | select(.[0] != null) | .[] | [.email, .password] | join(":")' "$CONFIG_FILE" > /etc/dovecot/passwd
+
+
+

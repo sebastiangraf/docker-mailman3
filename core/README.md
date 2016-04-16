@@ -37,7 +37,18 @@ There is an example file in `config/example` to get you started.
           "password": "{SHA256-CRYPT}$5$ojXGqoxOAygN91er$VQD/8dDyCYOaLl2yLJlRFXgl.NSrB3seZGXBRMdZAr6"
         }
       ]
-  }
+  },
+  "aliases":
+  [
+    {
+     "from": "root@domain.com",
+     "to": "info@example.com"
+    },
+    {
+     "from": "abuse@example.com",
+     "to": "info@example.com"
+    }
+  ]
 }
 
 ```
