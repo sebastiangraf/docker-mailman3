@@ -6,7 +6,7 @@ jq -r '.domains | .[] | select(.[0] != null) | .[] | select(has("aliases")) | .e
 # Build domain maps
 jq -r '.domains | keys | .[]' "$CONFIG_FILE" > /etc/postfix/virtual-mailbox-domains
 # Build mailbox maps
-jq -r '.domains | .[] | select(.[0] != null) | .[].email' "$CONFIG_FILE" | sed -e 's|\(.*\)@\(.*\)|\0\t\2/\1/|' > /etc/postfix/virtual-mailbox-maps
+jq -r '.domains | .[] | select(.[0] != null) | .[] | select(.password != null) | .email' "$CONFIG_FILE" | sed -e 's|\(.*\)@\(.*\)|\0\t\2/\1/|' > /etc/postfix/virtual-mailbox-maps
 
 # Process alias and mailbox maps
 postmap /etc/postfix/virtual
@@ -20,4 +20,4 @@ chown -R vmail:vmail /vmail
 chmod u+w /vmail
 
 # Build a password file
-jq -r '.domains | .[] | select(.[0] != null) | .[] | [.email, .password] | join(":")' "$CONFIG_FILE" > /etc/dovecot/passwd
+jq -r '.domains | .[] | select(.[0] != null) | .[] | select(.password != null) | [.email, .password] | join(":")' "$CONFIG_FILE" > /etc/dovecot/passwd
