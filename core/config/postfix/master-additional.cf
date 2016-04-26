@@ -5,6 +5,7 @@ dovecot   unix  -       n       n       -       -       pipe
 # authenticate after HELO has been sent
 submission      inet    n       -       n       -       -       smtpd
  -o smtpd_etrn_restrictions=reject
+ -o smtpd_tls_security_level=may # (! possible to force, but limits mail clients list and not recommended at all - non standard)
  -o smtpd_sasl_type=dovecot
  -o smtpd_sasl_path=private/auth
  -o smtpd_sasl_auth_enable=yes

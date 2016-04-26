@@ -4,6 +4,7 @@ core:
     - "25:25"
     - "143:143"
     - "587:587"
+    - "993:993"
   volumes:
     - /opt/dockermail/settings:/mail_settings
     - /opt/dockermail/vmail:/vmail
