@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Running `basename "$0"`"
+
+# Add additional settings if present in config
+if jq -e '.settings.additional_settings?' "$CONFIG_FILE" > /dev/null; then
+  jq -r '.settings.additional_settings[]' "$CONFIG_FILE" >> /etc/postfix/main.cf
+fi

@@ -23,7 +23,11 @@ There is an example file in `config/example` to get you started.
 {
   "settings": {
     "myhostname": "mail.example.com",
-    "mydestination": "$myhostname, localhost.localdomain, localhost"
+    "mydestination": "$myhostname, localhost.localdomain, localhost",
+    "additional_settings": [
+      "key1 = value1",
+      "key2 = value2"
+    ]
   },
   "domains": {
     "example.com" :
