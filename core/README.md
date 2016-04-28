@@ -91,12 +91,12 @@ See [Dovecot Wiki](http://wiki.dovecot.org/Authentication/PasswordSchemes) for m
 Using the pre-built image from docker hub, you can start your email by running:
 ```bash
 docker run -name dockermail -d \
--p 25:25 -p 587:587 -p 143:143 \
+-p 25:25 -p 587:587 -p 143:143 -p 993:993 \
 -v /opt/dockermail/settings:/mail_settings \
 -v /opt/dockermail/vmail:/vmail \
 adaline/dockermail-core
 ```
-This will connect SMTP ports 25/587 and IMAP port 143 to host and mount the folders as per examples given above.
+This will connect SMTP ports 25/587 and IMAP port 143/993 to host and mount the folders as per examples given above.
 
 ## SSL
 Container will produce own SSL keys and back these up into the settings folder. These files are:
