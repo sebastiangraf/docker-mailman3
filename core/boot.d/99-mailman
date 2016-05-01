@@ -1,0 +1,42 @@
+#!/bin/bash
+echo 'Running mailman boot script'
+
+POSTFIX_MAIN_CF=/etc/postfix/main.cf
+MAILMAN_POSTFIX_MAIN_CF=$MAILMAN_ENV_MAILMAN_HOME/deployment/postfix-main.cf
+
+env_dump=$(printenv)
+
+MAILMAN_CONFIG_HEADER="# Mailman - dockermail - start"
+MAILMAN_CONFIG_FOOTER="# Mailman - dockermail - end"
+
+function remove_mailman() {
+  if grep -q "$MAILMAN_CONFIG_HEADER" "$POSTFIX_MAIN_CF"; then
+    sed "/$MAILMAN_CONFIG_HEADER/,/$MAILMAN_CONFIG_FOOTER/d" "$POSTFIX_MAIN_CF" -i
+  fi
+}
+
+function add_mailman () {
+  if ! grep -q "$MAILMAN_CONFIG_HEADER" "$POSTFIX_MAIN_CF"; then
+    # Get Mailman domains from config
+    domains=$(jq -r '.settings | .mailman | .domains | join(", ")' "$CONFIG_FILE")
+    # Add to 'mydestination'
+    sed -i "s/^\(mydestination = .*\)$/\1, $domains/g" $POSTFIX_MAIN_CF
+    echo "$MAILMAN_CONFIG_HEADER" >> "$POSTFIX_MAIN_CF"
+    cat $MAILMAN_POSTFIX_MAIN_CF >> $POSTFIX_MAIN_CF
+    echo "$MAILMAN_CONFIG_FOOTER" >> "$POSTFIX_MAIN_CF"
+  else
+    echo "Warning: $POSTFIX_MAIN_CF already contains Mailman configuration, skipping"
+  fi
+}
+
+if [[ $env_dump =~ ^(.+MAILMAN)= ]] ; then
+  if [ ! -z "${BASH_REMATCH[1]}" ]; then
+    echo "MAILMAN env set, enabling Mailman"
+    add_mailman
+  fi
+else
+  echo "Cant find MAILMAN env, Mailman will be disabled"
+  remove_mailman
+fi
+
+echo 'Finished mailman boot script'

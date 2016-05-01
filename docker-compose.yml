@@ -8,9 +8,12 @@ core:
   volumes:
     - /opt/dockermail/settings:/mail_settings
     - /opt/dockermail/vmail:/vmail
+  volumes_from:
+    - mailman
   links:
    - opendkim
    - amavis
+   - mailman
 opendkim:
   build: ./opendkim
   volumes:
@@ -19,3 +22,9 @@ amavis:
   build: ./amavis
   volumes:
     - /opt/dockermail/settings:/mail_settings
+mailman:
+  build: ./mailman
+  ports:
+    - "80:80"
+  volumes:
+    - /opt/dockermail/mailman:/mailman/var

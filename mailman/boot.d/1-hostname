@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Running `basename "$0"`"
+
+# Update hostname if present in config
+if jq -e '.settings.myhostname?' "$CONFIG_FILE" > /dev/null; then
+  jq -r '.settings.myhostname' $CONFIG_FILE > /etc/mailname
+fi

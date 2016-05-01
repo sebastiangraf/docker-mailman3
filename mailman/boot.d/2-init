@@ -1,0 +1,44 @@
+#!/bin/bash
+echo "Running `basename "$0"`"
+
+BUILDOUT_CFG=$MAILMAN_HOME/buildout.cfg
+
+if [ ! -f /mailman/var/data/mailman.db ]; then
+	admin_pwd=admin
+
+	# Get secret key and admin user from config
+	secret_key=$(jq -r '.settings | .mailman | .secret_key' "$CONFIG_FILE")
+	admin_user=$(jq -r '.settings | .mailman | .admin_user' "$CONFIG_FILE")
+	admin_email=$(jq -r '.settings | .mailman | .admin_email' "$CONFIG_FILE")
+	
+	# set deployment to production
+	sed -i "s/^deployment =.*$/deployment = production/" BUILDOUT_CFG
+
+	cd $MAILMAN_HOME
+
+	# Run buildout
+	virtualenv venv
+	venv/bin/activate
+	buildout
+
+	if [ ! -d /var/log/mailman-web ]; then
+		mkdir /var/log/mailman-web
+	fi
+
+	bin/mailman-post-update
+
+	expect -c "
+		spawn bin/mailman-web-django-admin createsuperuser
+		expect \"): \"
+		send \"$admin_user\n\"
+		expect \"address: \"
+		send \"$admin_email\n\"
+		expect \"Password: \"
+		send \"$admin_pwd\n\"
+		expect \"Password (again): \"
+		send \"$admin_pwd\n\"
+		expect \"secret key: \"
+		send \"$secret_key\n\"
+		expect \"#\"
+	"
+fi

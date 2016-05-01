@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "Running `basename "$0"`"
+
+cd /mailman
+virtualenv venv
+source venv/bin/activate
+
+bin/mailman start
+bin/mailman-web-django-admin runserver 0.0.0.0:80 &

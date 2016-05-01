@@ -7,6 +7,7 @@ The setup is modular and has:
 * `core` -  base SMTP and IMAP server
 * `opendkim` - adds DKIM signing service for outgoing mail
 * `amavis` - adds incoming SPAM filter
+* `mailman` - adds a Mailman server
 
 Please see the README in each folder for more information.
 
@@ -42,6 +43,7 @@ Automated builds of the images are available here:
 * Core: https://hub.docker.com/r/adaline/dockermail-core/
 * OpenDKIM: https://hub.docker.com/r/adaline/dockermail-opendkim/
 * Amavis: https://hub.docker.com/r/adaline/dockermail-amavis/
+* Mailman: https://hub.docker.com/r/sebastiangraf/dockermail-mailman/
 
 ### Coming soon
 * Testing
