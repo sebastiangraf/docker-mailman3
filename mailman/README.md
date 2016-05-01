@@ -22,3 +22,4 @@ This image uses the same `config.json` as the `core`.
 }
 ```
 
+The default password for the admin user is "admin". The web frontend is accessible via port 80.
