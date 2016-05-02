@@ -12,7 +12,7 @@ if [ ! -f /mailman/var/data/mailman.db ]; then
 	admin_email=$(jq -r '.settings | .mailman | .admin_email' "$CONFIG_FILE")
 	
 	# set deployment to production
-	sed -i "s/^deployment =.*$/deployment = production/" BUILDOUT_CFG
+	sed -i "s/^deployment =.*$/deployment = production/" $BUILDOUT_CFG
 
 	cd $MAILMAN_HOME
 

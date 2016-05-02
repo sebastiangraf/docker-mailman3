@@ -33,7 +33,14 @@ RUN apt-get update && \
 COPY ./config/rsyslog.conf /etc/rsyslog.conf
 
 # Install mailman bundler
-RUN git clone https://gitlab.com/mailman/mailman-bundler.git mailman
+#RUN git clone https://gitlab.com/mailman/mailman-bundler.git mailman
+# Use fork instead of official repo because of this bugs:
+# https://gitlab.com/mailman/mailman/issues/112
+# https://gitlab.com/mailman/mailman-bundler/issues/9
+# https://gitlab.com/mailman/mailman/issues/210
+# https://gitlab.com/mailman/postorius/issues/111
+RUN git clone https://gitlab.com/jaywink/mailman.git mailman
+
 WORKDIR /mailman
 RUN virtualenv venv
 RUN . venv/bin/activate

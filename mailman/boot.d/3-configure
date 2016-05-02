@@ -46,6 +46,9 @@ configuration: python:mailman.config.postfix
 $MTA_CONFIG_FOOTER
 EOF
 
+# Workaround for Mailman-Client Bug - see https://gitlab.com/mailman/mailmanclient/issues/10
+sed -i 's/moderation_reasons=/#moderation_reasons=/' $MAILMAN_HOME/eggs/mailmanclient-1.0.1-py2.7.egg/mailmanclient/_client.py
+
 # IP may have changed .. replace in postfix_lmtp
 sed -i "s/\[.*\]/\[$IP\]/g" $POSTFIX_LMTP
 postmap $POSTFIX_LMTP
