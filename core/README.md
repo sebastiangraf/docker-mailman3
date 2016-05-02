@@ -22,12 +22,7 @@ There is an example file in `config/example` to get you started.
 ```json
 {
   "settings": {
-    "myhostname": "mail.example.com",
-    "mydestination": "$myhostname, localhost.localdomain, localhost",
-    "additional_settings": [
-      "key1 = value1",
-      "key2 = value2"
-    ]
+    "myhostname": "mail.example.com"
   },
   "domains": {
     "example.com" :
@@ -61,7 +56,6 @@ The hash within *config.json* contains 2 primary keys: `domains` and `settings`.
 
 ##### settings
 * `myhostname` - should be the fully qualified domain of the server hosting email. Although optional you will have problems with EHLO commands and `amavis` without it.
-* `mydestination` - (Optional) list of domains. See http://www.postfix.org/postconf.5.html#mydestination
 
 #### domains
 Each domain has an array of account objects, each account has the following keys:

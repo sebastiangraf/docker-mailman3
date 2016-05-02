@@ -1,8 +1,0 @@
-#!/bin/bash
-echo "Running `basename "$0"`"
-
-# Update mydestination if present in config
-if jq -e '.settings.mydestination?' "$CONFIG_FILE" > /dev/null; then
-  MY_DESTINATION=$(jq -r '.settings.mydestination' "$CONFIG_FILE")
-  sed -i -e "s/mydestination = .*$/mydestination = $MY_DESTINATION/" /etc/postfix/main.cf
-fi
