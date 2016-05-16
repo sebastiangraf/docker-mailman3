@@ -1,0 +1,19 @@
+#!/bin/bash
+echo "Running `basename "$0"`"
+
+bin/mailman-post-update
+
+chown -R www-data $MAILMAN_HOME/var/mailman-web
+chown -R www-data /var/spool/mailman-web/static
+chown www-data /var/log/mailman-web/mailman-web.log
+
+cd /mailman
+virtualenv venv
+source venv/bin/activate
+
+bin/mailman start
+
+if [ ! -d /etc/apache2/run ]; then
+	mkdir /etc/apache2/run
+fi
+service apache2 start

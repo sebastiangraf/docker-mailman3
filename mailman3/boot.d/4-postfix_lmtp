@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "Running `basename "$0"`"
+
+POSTFIX_LMTP=$MAILMAN_HOME/var/data/postfix_lmtp
+
+# IP may have changed .. replace in postfix_lmtp
+if [ -f $POSTFIX_LMTP ]; then
+	sed -i "s/\[.*\]/\[$IP\]/g" $POSTFIX_LMTP
+	postmap $POSTFIX_LMTP
+else
+	echo "$POSTFIX_LMTP does not exist!"
+fi

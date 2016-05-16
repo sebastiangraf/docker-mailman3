@@ -1,13 +1,13 @@
 #!/bin/bash
-echo 'Running mailman boot script'
+echo 'Running mailman3 boot script'
 
 POSTFIX_MAIN_CF=/etc/postfix/main.cf
 MAILMAN_POSTFIX_MAIN_CF=$MAILMAN_ENV_MAILMAN_HOME/deployment/postfix-main.cf
 
 env_dump=$(printenv)
 
-MAILMAN_CONFIG_HEADER="# Mailman - dockermail - start"
-MAILMAN_CONFIG_FOOTER="# Mailman - dockermail - end"
+MAILMAN_CONFIG_HEADER="# Mailman3 - dockermail - start"
+MAILMAN_CONFIG_FOOTER="# Mailman3 - dockermail - end"
 
 function remove_mailman() {
   if grep -q "$MAILMAN_CONFIG_HEADER" "$POSTFIX_MAIN_CF"; then
@@ -29,13 +29,13 @@ function add_mailman () {
   fi
 }
 
-if [[ $env_dump =~ ^(.+MAILMAN)= ]] ; then
+if [[ $env_dump =~ ^(.+MAILMAN3)= ]] ; then
   if [ ! -z "${BASH_REMATCH[1]}" ]; then
-    echo "MAILMAN env set, enabling Mailman"
+    echo "MAILMAN3 env set, enabling Mailman"
     add_mailman
   fi
 else
-  echo "Cant find MAILMAN env, Mailman will be disabled"
+  echo "Cant find MAILMAN3 env, Mailman will be disabled"
   remove_mailman
 fi
 

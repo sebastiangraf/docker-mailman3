@@ -1,0 +1,8 @@
+#!/bin/bash
+echo "Running `basename "$0"`"
+
+APACHE_CONFIG=$MAILMAN_HOME/deployment/apache.conf
+server_name=$(jq -r '.settings | .mailman | .domains[0]' $CONFIG_FILE)
+
+sed -i '/^ServerName.*$/d' $APACHE_CONFIG
+sed -i "1s/^/ServerName $server_name\n/" $APACHE_CONFIG
