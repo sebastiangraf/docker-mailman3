@@ -42,3 +42,10 @@ The first run takes some minutes. Check `docker logs` to see the progress.
 #### Create superuser
 
 docker exec -it CONTAINER_ID /mailman/bin/mailman-web-django-admin createsuperuser
+
+#### Footer / Welcome Templates
+
+The default templates can be overriden by placing some text files in the templates directory.
+
+* for the template search hierarchy see: https://gitlab.com/mailman/mailman/blob/master/src/mailman/utilities/i18n.py#L53
+* for the template substitution placeholders see: https://gitlab.com/mailman/mailman/blob/cd61fcc88245af25bda231710cbbe1eb75a5e0e4/src/mailman/handlers/decorate.py#L234
