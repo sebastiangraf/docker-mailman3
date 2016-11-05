@@ -1,50 +1,50 @@
-Dockermail
+Mailman in Docker
 ==========
 
-### Easy mail service in docker containers.
+### Configuration
 
-The setup is modular and has:
-* `core` -  base SMTP and IMAP server
-* `opendkim` - adds DKIM signing service for outgoing mail
-* `amavis` - adds incoming SPAM filter
-* `mailman` - adds a Mailman server
+This image uses the same `config.json` as the `core`.
 
-Please see the README in each folder for more information.
+#### Config example
 
-## Getting started
- Check out this post:
- [Easy private email hosting with dockermail](http://madespecial.co.uk/blog/2016/1/28/easy-private-email-hosting-with-dockermail)
-
----
-# Config changes
-New version has replaced the previous collection of flat files with a single `config.json` file, please see `core` README for details on syntax. You will need to update your configuration to upgrade to new dockermail version.
-
----
-
-### SPAM
-Although OpenDKIM is optional, it will really help your messages across spam filters. See `opendkim` folder for more info on setting it up.
-
-You should also add PTR record to your IP (aka Reverse DNS) which is done by your server provider.
-
-And finally, generate and add an SPF record to your domain, search for instructions on this - there are a few generator site around and the setup steps depend on your domain name provider.
-
-You can test your configuration using the excellent [mail-tester.com](https://www.mail-tester.com/) service.
-
-### Compose
-Assuming you follow READMEs to set up all the containers, you should just be able to run:
-
-```bash
-docker-compose up
+```json
+{
+  "settings": {
+    "myhostname": "mydomain.com",
+    "mailman": {
+      "secret_key": "enter-a-random-secret-key-here",
+      "language_code": "en-us",
+      "time_zone": "America/Chicago",
+      "admin_email": "listmaster@mydomain.com",
+      "domains": ["lists.mydomain.com"]
+    }
+  }
+}
 ```
-This will spin up all the containers and link them together, easy!
 
-### Images on DockerHub
-Automated builds of the images are available here:
-* Core: https://hub.docker.com/r/adaline/dockermail-core/
-* OpenDKIM: https://hub.docker.com/r/adaline/dockermail-opendkim/
-* Amavis: https://hub.docker.com/r/adaline/dockermail-amavis/
-* Mailman: https://hub.docker.com/r/sebastiangraf/dockermail-mailman/
+The first domain is used as hostname. The secret key must contain only [A-Za-z0-9].
 
-### Coming soon
-* Testing
-* https://github.com/vstakhov/rspamd module
+##### Language Code / Time Zone
+
+supported language codes: http://www.i18nguy.com/unicode/language-identifiers.html
+
+supported time zones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+#### Config changes
+
+After config changes, mailman and the core container have to be restarted.
+
+### First run
+
+The first run takes some minutes. Check `docker logs` to see the progress.
+
+#### Create superuser
+
+docker exec -it CONTAINER_ID /mailman/bin/mailman-web-django-admin createsuperuser
+
+#### Footer / Welcome Templates
+
+The default templates can be overriden by placing some text files in the templates directory.
+
+* for the template search hierarchy see: https://gitlab.com/mailman/mailman/blob/master/src/mailman/utilities/i18n.py#L53
+* for the template substitution placeholders see: https://gitlab.com/mailman/mailman/blob/cd61fcc88245af25bda231710cbbe1eb75a5e0e4/src/mailman/handlers/decorate.py#L234

@@ -1,7 +1,0 @@
-#!/bin/bash
-echo "Running `basename "$0"`"
-
-# Remove defunct rsyslog PID, so it does not complain on restart
-if [ -f /var/run/rsyslogd.pid ]; then
-	rm /var/run/rsyslogd.pid
-fi
