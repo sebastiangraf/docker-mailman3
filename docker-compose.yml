@@ -1,0 +1,30 @@
+mail-mailman:
+  image: sebastiangraf/docker-mailman3
+  volumes:
+    - mailman-data:/mailman/var
+    - mailman-config:/mail_settings
+  expose:
+    - "80:80"
+    - "8024:8024"
+
+mail-core:
+  image: tvial/docker-mailserver:latest
+  hostname: mail.twines.ch
+  ports:
+    - "25:25"
+    - "143:143"
+    - "587:587"
+    - "993:993"
+  volumes:
+    - mail-data:/var/mail
+    - mail-config:/tmp/docker-mailserver
+    - mail-config/config-dovecot/10-mail.conf:/etc/dovecot/conf.d/10-mail.conf
+  volumes_from:
+    - mail-mailman
+  environment:
+    - ENABLE_FAIL2BAN=1
+  cap_add:
+    - NET_ADMIN
+  links:
+    - mail-mailman:mailman
+
